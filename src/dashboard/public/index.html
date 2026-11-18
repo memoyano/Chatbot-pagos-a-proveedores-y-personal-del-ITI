@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>ITI · Dashboard de Pagos</title>
+  <link rel="stylesheet" href="/dashboard/styles.css" />
+</head>
+
+<body>
+  <div id="login-view" class="auth-shell">
+    <section class="auth-card" aria-labelledby="login-title">
+      <div class="brand-logo-card login-logo">
+        <img src="/dashboard/logo-ITI.svg" alt="Instituto Tecnológico Internacional Universitario" class="brand-logo" />
+      </div>
+      <div>
+        <p class="eyebrow">Gestión financiera institucional</p>
+        <h1 id="login-title">Dashboard de Pagos</h1>
+        <p class="muted">Acceso interno mediante cédula/RUC y código enviado al correo registrado en el ERP.</p>
+      </div>
+
+      <form id="request-form" class="stack">
+        <label for="cedula">Cédula o RUC</label>
+        <input id="cedula" name="cedula" inputmode="numeric" autocomplete="username" placeholder="Ej. 1712345678"
+          required />
+        <button type="submit" class="btn primary">Enviar código</button>
+      </form>
+
+      <form id="verify-form" class="stack hidden">
+        <p id="otp-message" class="notice"></p>
+        <label for="otp">Código de 6 dígitos</label>
+        <input id="otp" name="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}"
+          placeholder="000000" required />
+        <button type="submit" class="btn primary">Ingresar</button>
+        <button id="back-login" type="button" class="btn ghost">Cambiar identificación</button>
+      </form>
+
+      <p id="login-error" class="error-text" role="alert"></p>
+    </section>
+  </div>
+
+  <div id="app-view" class="app-shell hidden">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="brand-logo-card side-logo">
+          <img src="/dashboard/logo-ITI.svg" alt="ITI" class="brand-logo" />
+        </div>
+
+        <div class="side-brand-copy">
+          <strong>Dashboard de Pagos</strong>
+          <span>Gestión administrativa</span>
+        </div>
+      </div>
+      <nav id="nav" class="nav" aria-label="Secciones del dashboard">
+        <button type="button" class="nav-btn active" data-view="overview">Resumen</button>
+        <button type="button" class="nav-btn" data-view="solicitudes">Solicitudes</button>
+        <button type="button" class="nav-btn" data-view="comprobantes">Comprobantes</button>
+        <button type="button" class="nav-btn" data-view="eventos">Eventos</button>
+        <button type="button" class="nav-btn" data-view="caja">Caja chica</button>
+        <button type="button" class="nav-btn" data-view="docentes">Docentes</button>
+        <button type="button" class="nav-btn" data-view="ia">IA documental</button>
+        <button type="button" class="nav-btn" data-view="auditoria">Auditoría</button>
+        <button type="button" class="nav-btn" data-view="proveedores">Proveedores</button>
+        <button type="button" class="nav-btn" data-view="sistema">Sistema</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div id="user-card" class="user-card"></div>
+        <button id="logout" type="button" class="btn ghost full">Cerrar sesión</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Instituto Tecnológico Internacional Universitario</p>
+          <h1 id="view-title">Resumen operativo</h1>
+        </div>
+        <div class="top-actions">
+          <label class="period-control">
+            <span>Período</span>
+            <input id="period" type="month" />
+          </label>
+          <button id="refresh" type="button" class="btn secondary">Actualizar</button>
+        </div>
+      </header>
+
+      <div id="global-message" class="global-message hidden" role="status"></div>
+      <section id="content" class="content" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <script src="/dashboard/app.js" defer></script>
+</body>
+
+</html>

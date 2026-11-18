@@ -1,0 +1,58 @@
+name: Deploy Azure App Service
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify
+        run: npm run verify
+
+      - name: Prepare production dependencies
+        run: npm prune --omit=dev
+
+      - name: Show deployment target
+        run: |
+          echo "DEPLOY TARGET = chatbot-iti-02"
+
+      - name: Build deployment ZIP
+        run: |
+          zip -r release.zip . \
+            -x ".git/*" \
+               ".github/*" \
+               ".env" \
+               "release.zip"
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: chatbot-iti-02
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_V2 }}
+          package: release.zip
